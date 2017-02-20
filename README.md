@@ -1,5 +1,5 @@
 # BOOLRefreshController
-Decoupled solution for DROP DOWN TO REFRESH. View and controller is decoupled, the controller is reused, the refresh  control views can custom as everything you want.
+Decoupled solution for DROP DOWN TO REFRESH 
 
 # Check out the code, the demo tell you everything.
 ### Refresh control attach on the top of table view
