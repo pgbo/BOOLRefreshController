@@ -172,7 +172,11 @@ const NSTimeInterval BOOLRefreshControllerSlowAnimatedDuration = 0.4;
 }
 
 - (void)removeObservers {
-    [self.observable removeObserver:self forKeyPath:BOOLRefreshControllerKeyPathContentOffset];
+    @try {
+        [self.observable removeObserver:self forKeyPath:BOOLRefreshControllerKeyPathContentOffset];
+    } @catch (id exception) {
+        //do nothing, obviously it wasn't attached because an exception was thrown
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
