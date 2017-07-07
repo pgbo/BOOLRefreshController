@@ -9,6 +9,7 @@ Pod::Spec.new do |spec|
 
     spec.homepage              = 'https://github.com/pgbo/BOOLRefreshController.git'
     spec.license               = { :type => 'MIT', :file => 'LICENSE' }
+    spec.author                = { 'pgbo' => '460667915@qq.com' }
     spec.platform              = :ios, '7.0'
     spec.source                = { :git => 'https://github.com/pgbo/BOOLRefreshController.git', :tag => spec.version }
     spec.source_files          = 'Classes/*.{h,m}'
