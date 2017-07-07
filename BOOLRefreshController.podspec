@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                  = 'BOOLRefreshController'
-    spec.version               = '1.0.1'
+    spec.version               = '1.0.2'
     spec.summary               = 'Decoupled solution for DROP DOWN TO REFRESH'
 
     spec.description           = <<-DESC
