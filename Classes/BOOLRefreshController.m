@@ -49,23 +49,25 @@ const NSTimeInterval BOOLRefreshControllerSlowAnimatedDuration = 0.4;
     
     // 恢复inset和offset
     UIEdgeInsets c_inset = self.observable.contentInset;
+    __weak typeof(self)weakSelf = self;
     [UIView animateWithDuration:BOOLRefreshControllerSlowAnimatedDuration animations:^{
         
-        self.observable.contentInset = UIEdgeInsetsMake(self.observableContentInsetTopBeforeRefresh, c_inset.left, c_inset.bottom, c_inset.right);
+        weakSelf.observable.contentInset = UIEdgeInsetsMake(weakSelf.observableContentInsetTopBeforeRefresh, c_inset.left, c_inset.bottom, c_inset.right);
         
-        if (self.finishRefreshAnimationBlock) {
-            self.finishRefreshAnimationBlock(self);
+        if (weakSelf.finishRefreshAnimationBlock) {
+            weakSelf.finishRefreshAnimationBlock(weakSelf);
         }
         
     } completion:^(BOOL finished) {
-        
-        self.pullingPercent = 0.0;
-        
-        if (self.state != BOOLRefreshControlStateIdle) {
-            self.state = BOOLRefreshControlStateIdle;
+        if (weakSelf) {
+            weakSelf.pullingPercent = 0.0;
+            
+            if (weakSelf.state != BOOLRefreshControlStateIdle) {
+                weakSelf.state = BOOLRefreshControlStateIdle;
+            }
+            // 重新添加监听
+            [weakSelf addObservers];
         }
-        // 重新添加监听
-        [self addObservers];
     }];
 }
 
@@ -100,22 +102,25 @@ const NSTimeInterval BOOLRefreshControllerSlowAnimatedDuration = 0.4;
         self.state = BOOLRefreshControlRefreshing;
         self.observableContentInsetTopBeforeRefresh = c_inset_top;
         
+        __weak typeof(self)weakSelf = self;
         [UIView animateWithDuration:BOOLRefreshControllerFastAnimatedDuration animations:^{
-            CGFloat newTop = self.observableContentInsetTopBeforeRefresh + self.refreshThreshold;
+            CGFloat newTop = weakSelf.observableContentInsetTopBeforeRefresh + weakSelf.refreshThreshold;
             // 增加滚动区域top
-            self.observable.contentInset = UIEdgeInsetsMake(newTop, c_inset.left, c_inset.bottom, c_inset.right);
+            weakSelf.observable.contentInset = UIEdgeInsetsMake(newTop, c_inset.left, c_inset.bottom, c_inset.right);
             // 设置滚动位置
-            [self.observable setContentOffset:CGPointMake(self.observable.contentOffset.x, -newTop) animated:NO];
+            [weakSelf.observable setContentOffset:CGPointMake(weakSelf.observable.contentOffset.x, -newTop) animated:NO];
         } completion:^(BOOL finished) {
-            if (self.refreshExecuteBlock) {
-                self.refreshExecuteBlock(self);
+            if (weakSelf) {
+                if (weakSelf.refreshExecuteBlock) {
+                    weakSelf.refreshExecuteBlock(weakSelf);
+                }
+                
+                // 重新添加监听
+                [weakSelf addObservers];
             }
-            
-            // 重新添加监听
-            [self addObservers];
         }];
     } else if (isDragging && canRefreshPosition) {
-    
+        
         if (self.stateWillChangeBlock) {
             self.stateWillChangeBlock(self, self.state, BOOLRefreshControlPulling);
         }
@@ -144,7 +149,7 @@ const NSTimeInterval BOOLRefreshControllerSlowAnimatedDuration = 0.4;
     BOOLRefreshControlState old = self.state;
     
     _state = state;
-
+    
     if (self.stateDidChangedBlock) {
         self.stateDidChangedBlock(self, old, state);
     }
